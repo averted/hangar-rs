@@ -10,8 +10,9 @@ use std::io;
 
 fn main() -> Result<(), &'static str> {
     let dict = Dictionary::new();
-    let mut word = Word::from(&dict.random());
     let mut state = State::new();
+    let mut word = Word::from(&dict.random());
+    word.reveal_rand();
 
     loop {
         render(&word, &state);
@@ -31,6 +32,7 @@ fn main() -> Result<(), &'static str> {
                 state.score += 1;
                 state.errors = 0;
                 word = Word::from(&dict.random());
+                word.reveal_rand();
             }
         }
     }

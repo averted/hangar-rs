@@ -7,8 +7,8 @@ pub struct Dictionary {
 }
 
 impl Dictionary {
-    pub fn new() -> Self {
-        let f = fs::File::open("words.txt").unwrap_or_else(|e| panic!("File not found: {}", e));
+    pub fn new(file: &str) -> Self {
+        let f = fs::File::open(file).unwrap_or_else(|e| panic!("File not found: {}", e));
         let f = BufReader::new(f);
 
         Self {
@@ -26,5 +26,16 @@ impl Dictionary {
             .choose(&mut rand::thread_rng())
             .expect("File has no lines")
             .to_string()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    #[should_panic]
+    fn new() {
+        Dictionary::new("invalid.txt");
     }
 }

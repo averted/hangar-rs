@@ -9,7 +9,7 @@ use crate::word::Word;
 use std::io;
 
 fn main() -> Result<(), &'static str> {
-    let dict = Dictionary::new();
+    let dict = Dictionary::new("words.txt");
     let mut state = State::new();
     let mut word = Word::from(&dict.random());
     word.reveal_rand();

@@ -15,3 +15,18 @@ impl State {
         self.errors < 5
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn valid() {
+        let mut s = State::new();
+        assert_eq!(s.valid(), true);
+
+        s.errors = 5;
+
+        assert_eq!(s.valid(), false);
+    }
+}

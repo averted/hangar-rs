@@ -28,7 +28,7 @@ impl Word {
     pub fn reveal_rand(&mut self) {
         let rng = rand::thread_rng().gen_range(0..self.letters.len());
         let l = self.letters[rng];
-        let arr = self.letters.iter_mut().filter(|x| x.is(l.letter));
+        let arr = self.letters.iter_mut().filter(|x| x.is(l.value));
 
         for letter in arr {
             letter.reveal();

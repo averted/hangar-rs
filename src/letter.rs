@@ -2,7 +2,7 @@ use std::fmt::{Display, Formatter, Result as FmtResult};
 
 #[derive(Debug, Copy, Clone)]
 pub struct Letter {
-    pub letter: char,
+    pub value: char,
     pub revealed: bool,
 }
 
@@ -16,7 +16,7 @@ impl Letter {
         }
 
         Self {
-            letter,
+            value: letter,
             revealed: false,
         }
     }
@@ -29,7 +29,7 @@ impl Letter {
         let mut arr = letter.to_uppercase();
 
         match arr.next() {
-            Some(letter) => self.letter == letter,
+            Some(letter) => self.value == letter,
             None => false,
         }
     }
@@ -37,6 +37,36 @@ impl Letter {
 
 impl Display for Letter {
     fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
-        write!(f, "{}", if self.revealed { self.letter } else { '_' })
+        write!(f, "{}", if self.revealed { self.value } else { '_' })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn new() {
+        let l = Letter::new('l');
+        assert_eq!(l.value, 'L');
+        assert_eq!(l.revealed, false);
+        assert_eq!(l.to_string(), String::from('_'));
+    }
+
+    #[test]
+    fn reveal() {
+        let mut l = Letter::new('l');
+        assert_eq!(l.revealed, false);
+        l.reveal();
+        assert_eq!(l.revealed, true);
+    }
+
+    #[test]
+    fn is() {
+        let l = Letter::new('l');
+        assert_eq!(l.is('l'), true);
+        assert_eq!(l.is('L'), true);
+        assert_eq!(l.is('c'), false);
+        assert_eq!(l.is('_'), false);
     }
 }

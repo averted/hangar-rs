@@ -1,18 +1,18 @@
 pub struct State {
     pub score: u8,
-    pub errors: u8,
+    pub errors: Vec<char>,
 }
 
 impl State {
     pub fn new() -> Self {
         Self {
             score: 0,
-            errors: 0,
+            errors: vec![],
         }
     }
 
     pub fn valid(&self) -> bool {
-        self.errors < 5
+        self.errors.len() < 5
     }
 }
 
@@ -25,7 +25,7 @@ mod tests {
         let mut s = State::new();
         assert_eq!(s.valid(), true);
 
-        s.errors = 5;
+        s.errors = vec!['a', 'b', 'c', 'd', 'e'];
 
         assert_eq!(s.valid(), false);
     }

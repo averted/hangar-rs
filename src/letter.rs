@@ -2,8 +2,8 @@ use std::fmt::{Display, Formatter, Result as FmtResult};
 
 #[derive(Debug, Copy, Clone)]
 pub struct Letter {
-    pub value: char,
-    pub revealed: bool,
+    value: char,
+    revealed: bool,
 }
 
 impl Letter {
@@ -33,10 +33,18 @@ impl Letter {
             None => false,
         }
     }
+
+    pub fn value(&self) -> char {
+        self.value
+    }
+
+    pub fn is_revealed(&self) -> bool {
+        self.revealed
+    }
 }
 
 impl Display for Letter {
-    fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
+    fn fmt(&self, f: &mut Formatter) -> FmtResult {
         write!(f, "{}", if self.revealed { self.value } else { '_' })
     }
 }

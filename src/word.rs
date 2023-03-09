@@ -28,7 +28,7 @@ impl Word {
     pub fn reveal_rand(&mut self) {
         let rng = rand::thread_rng().gen_range(0..self.letters.len());
         let l = self.letters[rng];
-        let arr = self.letters.iter_mut().filter(|x| x.is(l.value));
+        let arr = self.letters.iter_mut().filter(|x| x.is(l.value()));
 
         for letter in arr {
             letter.reveal();
@@ -47,12 +47,12 @@ impl Word {
     }
 
     pub fn remaining(&self) -> usize {
-        self.letters.iter().filter(|x| !x.revealed).count()
+        self.letters.iter().filter(|x| !x.is_revealed()).count()
     }
 }
 
 impl Display for Word {
-    fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
+    fn fmt(&self, f: &mut Formatter) -> FmtResult {
         let letters: Vec<String> = self.letters.iter().map(|x| x.to_string()).collect();
         write!(f, "{:?}", letters.join(" "))
     }

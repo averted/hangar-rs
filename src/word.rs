@@ -25,13 +25,27 @@ impl Word {
         }
     }
 
-    pub fn reveal_rand(&mut self) {
-        let rng = rand::thread_rng().gen_range(0..self.letters.len());
-        let l = self.letters[rng];
-        let arr = self.letters.iter_mut().filter(|x| x.is(l.value()));
+    pub fn reveal_rand(&mut self, difficulty: i32) {
+        for _ in 0..difficulty {
+            loop {
+                let rng = rand::thread_rng().gen_range(0..self.letters.len());
+                let rand_letter = self.letters[rng];
 
-        for letter in arr {
-            letter.reveal();
+                if rand_letter.is_revealed() {
+                    continue;
+                }
+
+                let arr = self
+                    .letters
+                    .iter_mut()
+                    .filter(|x| x.is(rand_letter.value()));
+
+                for letter in arr {
+                    letter.reveal();
+                }
+
+                break;
+            }
         }
     }
 
@@ -79,7 +93,7 @@ mod tests {
     fn reveal_rand() {
         let s = "testing";
         let mut w = Word::from(s);
-        w.reveal_rand();
+        w.reveal_rand(1);
         assert!(w.remaining() < s.len());
     }
 

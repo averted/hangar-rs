@@ -6,14 +6,20 @@ mod word;
 use crate::dictionary::Dictionary;
 use crate::state::State;
 use crate::word::Word;
+use std::env;
 use std::io;
+use std::process;
 
 fn main() -> Result<(), &'static str> {
     let dict = Dictionary::new("words.txt");
-    let mut state = State::new();
-    let mut word = Word::from(&dict.random());
-    word.reveal_rand();
-    word.reveal_rand();
+
+    let mut state = State::new(env::args()).unwrap_or_else(|err| {
+        eprintln!("Problem parsing arguments: {}", err);
+        process::exit(1);
+    });
+
+    let mut word = Word::from(&dict.random(state.difficulty()));
+    word.reveal_rand(state.difficulty());
 
     loop {
         render(&word, &state);
@@ -33,9 +39,8 @@ fn main() -> Result<(), &'static str> {
                     if word.remaining() == 0 {
                         state.score += 1;
                         state.errors = vec![];
-                        word = Word::from(&dict.random());
-                        word.reveal_rand();
-                        word.reveal_rand();
+                        word = Word::from(&dict.random(state.difficulty()));
+                        word.reveal_rand(state.difficulty());
                     }
                 }
             }
@@ -43,7 +48,7 @@ fn main() -> Result<(), &'static str> {
     }
 }
 
-pub fn ask_for_letter() -> Result<char, &'static str> {
+fn ask_for_letter() -> Result<char, &'static str> {
     println!("Enter letter:");
 
     let mut input = String::new();
@@ -60,7 +65,7 @@ pub fn ask_for_letter() -> Result<char, &'static str> {
     Ok(input.chars().next().unwrap())
 }
 
-pub fn render(word: &Word, state: &State) {
+fn render(word: &Word, state: &State) {
     let mut used = String::from("");
 
     for c in &state.errors {

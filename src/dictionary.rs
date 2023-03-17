@@ -20,12 +20,21 @@ impl Dictionary {
         }
     }
 
-    pub fn random(&self) -> String {
-        self.words
-            .iter()
-            .choose(&mut rand::thread_rng())
-            .expect("File has no lines")
-            .to_string()
+    pub fn random(&self, difficulty: i32) -> String {
+        loop {
+            let word = self
+                .words
+                .iter()
+                .choose(&mut rand::thread_rng())
+                .expect("File has no lines")
+                .to_string();
+
+            if word.len() >= ((difficulty + 3) as usize) {
+                return word;
+            }
+
+            continue;
+        }
     }
 }
 

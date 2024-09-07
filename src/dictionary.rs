@@ -21,6 +21,8 @@ impl Dictionary {
     }
 
     pub fn random(&self, difficulty: i32) -> String {
+        let mut count = 0;
+
         loop {
             let word = self
                 .words
@@ -33,6 +35,12 @@ impl Dictionary {
                 return word;
             }
 
+            count += 1;
+
+            if count >= self.words.len() {
+                panic!("No words found with that difficulty");
+            }
+
             continue;
         }
     }
@@ -43,8 +51,22 @@ mod tests {
     use super::*;
 
     #[test]
-    #[should_panic]
+    #[should_panic(expected = "File not found")]
     fn new() {
         Dictionary::new("invalid.txt");
+    }
+
+    #[test]
+    fn random() {
+        let dict = Dictionary::new("one_letter_words.txt");
+        let word = dict.random(1);
+        assert_eq!(word.len() > 0, true);
+    }
+
+    #[test]
+    #[should_panic(expected = "No words found with that difficulty")]
+    fn random_invalid_difficulty() {
+        let dict = Dictionary::new("one_letter_words.txt");
+        dict.random(3);
     }
 }
